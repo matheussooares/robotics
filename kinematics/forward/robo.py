@@ -3,10 +3,10 @@ from numpy import radians
 from kinematics.forward.elo import Elo
 
 class Robo:
-    def __init__(self, name: str ,parameters: list) -> None:
+    
+    def __init__(self, *, name: str = 'Manipulator', parameters: list):
       self._name = name
-      self._parameters = parameters
-      self.__series_link()
+      self.series_link(parameters = parameters)
       self.__homogeneous_transformations()
       self.__joints()
 
@@ -26,32 +26,29 @@ class Robo:
     def Joints(self):
       return self._JointVariable
 
-
     # Cria a cadeia cinemática de elos
-    def __series_link(self):
-      """
-      Cria uma cadeia cinemática de elos a partir dos parâmetros fornecidos.
+    def series_link(self, *, parameters):
 
-      Args:
-      None
-
-      Returns:
-      None
-
-      Raises:
-      None
-      """ 
+      self._parameters = parameters
       serieslink = []
-      parameter_list = []
+      
       for parameter in self._parameters:
+        if isinstance(parameter, Elo): 
+          serieslink.append(parameter)
+        else: 
+          parameter_list = []
           for value in parameter:
               if isinstance(value, str):
                   parameter_list.append(symbols(value))
               else:
                   parameter_list.append(value)
-          
-          serieslink.append(Elo(*parameter_list))
-          parameter_list.clear()
+          serieslink.append(Elo(theta = parameter_list[0], 
+                                d  = parameter_list[1], 
+                                a =  parameter_list[2], 
+                                alpha  = parameter_list[3], 
+                                phase = parameter_list[4]
+                              )
+          )
       
       self._serieslink = serieslink
 
