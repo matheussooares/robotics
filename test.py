@@ -1,8 +1,5 @@
 from kinematics.forward.robo import Robo,Elo
 
-
-
-
 # Modelagem da cinemática direta usando Denavit-hartenberg
 Elos = [['theta_1',10,0,90,0],
         ['theta_2',0,18,180,0],
